@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Food Choices Analysis | Tableau Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .viz-container {
+            min-height: 600px;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        
+        .scenario-card {
+            border-left: 4px solid var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .viz-container {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-chart-pie text-indigo-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-semibold text-gray-900">FoodChoices Analytics</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="#home" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Home</a>
+                    <a href="#visualizations" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Visualizations</a>
+                    <a href="#scenarios" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Scenarios</a>
+                    <a href="#methodology" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Methodology</a>
+                    <a href="#contact" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">College Food Choices Analysis</h1>
+                    <p class="mt-4 text-xl text-indigo-100">
+                        Transforming dietary data into actionable insights for healthier student populations
+                    </p>
+                    <div class="mt-8">
+                        <a href="#visualizations" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-50 transition duration-150">
+                            Explore Dashboard
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="card p-6 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm">
+                        <h3 class="text-xl font-semibold mb-4">Key Benefits</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-emerald-300 mt-1 mr-2"></i>
+                                <span>Real-time nutritional intake monitoring</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-emerald-300 mt-1 mr-2"></i>
+                                <span>Predictive analytics for dietary deficiencies</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-emerald-300 mt-1 mr-2"></i>
+                                <span>Personalized nutrition plan recommendations</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-emerald-300 mt-1 mr-2"></i>
+                                <span>Data-driven cafeteria menu optimization</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Data Visualization Section -->
+        <section id="visualizations" class="mb-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Interactive Data Visualizations</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                <div class="card p-6">
+                    <div class="feature-icon bg-indigo-100 text-indigo-600">
+                        <i class="fas fa-carrot text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Nutritional Intake</h3>
+                    <p class="text-gray-600">Explore macronutrient and micronutrient consumption patterns across student demographics.</p>
+                </div>
+                <div class="card p-6">
+                    <div class="feature-icon bg-emerald-100 text-emerald-600">
+                        <i class="fas fa-utensils text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Food Preferences</h3>
+                    <p class="text-gray-600">Understand which food items are most popular and how preferences vary by student groups.</p>
+                </div>
+                <div class="card p-6">
+                    <div class="feature-icon bg-purple-100 text-purple-600">
+                        <i class="fas fa-heartbeat text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Health Outcomes</h3>
+                    <p class="text-gray-600">Correlate dietary choices with self-reported health metrics and academic performance.</p>
+                </div>
+            </div>
+            
+            <div class="viz-container card p-4">
+                <!-- Placeholder for Tableau visualization - replace with your embed code -->
+                <div class="h-full flex items-center justify-center bg-gray-50 rounded">
+                    <div class="text-center p-8">
+                        <i class="fas fa-table text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-xl font-medium text-gray-500">Tableau Visualization</h3>
+                        <p class="text-gray-400 mt-2">This space would contain your embedded Tableau dashboard</p>
+                        <p class="text-xs text-gray-400 mt-4">Example embed code: &lt;iframe src="https://public.tableau.com/views/YourDashboard"&gt;&lt;/iframe&gt;</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600">Filter Options</h3>
+                    <p class="text-gray-600 mb-4">Our interactive dashboard allows you to filter data by:</p>
+                    <ul class="grid grid-cols-2 gap-2">
+                        <li class="flex items-center"><i class="fas fa-filter text-indigo-500 mr-2"></i> Academic Year</li>
+                        <li class="flex items-center"><i class="fas fa-filter text-indigo-500 mr-2"></i> Gender</li>
+                        <li class="flex items-center"><i class="fas fa-filter text-indigo-500 mr-2"></i> Residence</li>
+                        <li class="flex items-center"><i class="fas fa-filter text-indigo-500 mr-2"></i> Meal Plan</li>
+                        <li class="flex items-center"><i class="fas fa-filter text-indigo-500 mr-2"></i> Dietary Needs</li>
+                        <li class="flex items-center"><i class="fas fa-filter text-indigo-500 mr-2"></i> Exercise Frequency</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-emerald-600">Visualization Types</h3>
+                    <p class="text-gray-600 mb-4">The dashboard includes multiple view types for comprehensive analysis:</p>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center">
+                            <i class="fas fa-chart-bar text-2xl text-purple-500 mb-2"></i>
+                            <p class="text-sm">Bar Charts</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-chart-pie text-2xl text-blue-500 mb-2"></i>
+                            <p class="text-sm">Pie Charts</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-chart-line text-2xl text-green-500 mb-2"></i>
+                            <p class="text-sm">Trend Lines</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-map text-2xl text-red-500 mb-2"></i>
+                            <p class="text-sm">Heat Maps</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-braille text-2xl text-yellow-500 mb-2"></i>
+                            <p class="text-sm">Scatter Plots</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-table text-2xl text-indigo-500 mb-2"></i>
+                            <p class="text-sm">Data Tables</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scenarios Section -->
+        <section id="scenarios" class="mb-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Implementation Scenarios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Scenario 1 -->
+                <div class="scenario-card card p-6 bg-indigo-50">
+                    <div class="flex items-start mb-4">
+                        <div class="bg-indigo-100 p-2 rounded-lg mr-4">
+                            <i class="fas fa-bell text-indigo-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-indigo-800">Monitoring Nutritional Intake</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        Receive real-time alerts about concerning trends like decreased fruit and vegetable consumption. Quickly assess the impact and deploy interventions through awareness campaigns or menu adjustments.
+                    </p>
+                    <div class="bg-white p-4 rounded-lg">
+                        <h4 class="font-medium text-indigo-700 mb-2">Key Metrics:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-indigo-500 mr-2"></i> Fruit/vegetable servings per day</li>
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-indigo-500 mr-2"></i> Processed food consumption</li>
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-indigo-500 mr-2"></i> Hydration levels</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Scenario 2 -->
+                <div class="scenario-card card p-6 bg-emerald-50">
+                    <div class="flex items-start mb-4">
+                        <div class="bg-emerald-100 p-2 rounded-lg mr-4">
+                            <i class="fas fa-clipboard-check text-emerald-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-emerald-800">Addressing Dietary Deficiencies</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        Identify widespread deficiencies like low vitamin intake or excessive unhealthy snacking. Health services can use this data to coordinate targeted health promotion efforts and educational programs.
+                    </p>
+                    <div class="bg-white p-4 rounded-lg">
+                        <h4 class="font-medium text-emerald-700 mb-2">Key Metrics:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-emerald-500 mr-2"></i> Vitamin/mineral deficiencies</li>
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-emerald-500 mr-2"></i> Sugar/salt intake levels</li>
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-emerald-500 mr-2"></i> Balanced meal composition</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Scenario 3 -->
+                <div class="scenario-card card p-6 bg-purple-50">
+                    <div class="flex items-start mb-4">
+                        <div class="bg-purple-100 p-2 rounded-lg mr-4">
+                            <i class="fas fa-robot text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-purple-800">Predictive Analysis & Personalized Plans</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        Leverage predictive analytics to anticipate health issues from poor dietary habits. Develop personalized nutrition plans with continuous support to encourage long-term healthy eating.
+                    </p>
+                    <div class="bg-white p-4 rounded-lg">
+                        <h4 class="font-medium text-purple-700 mb-2">Key Metrics:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-purple-500 mr-2"></i> Risk score for poor nutrition</li>
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-purple-500 mr-2"></i> Personalized recommendation success rate</li>
+                            <li class="flex items-center"><i class="fas fa-circle text-xs text-purple-500 mr-2"></i> Behavior change over time</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology Section -->
+        <section id="methodology" class="mb-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Project Methodology</h2>
+            <div class="card p-8">
+                <div class="flow-root">
+                    <ul class="divide-y divide-gray-200">
+                        <li class="py-6">
+                            <div class="flex md:items-start flex-col md:flex-row">
+                                <div class="flex-shrink-0 mr-4 mb-4 md:mb-0">
+                                    <span class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white font-bold">1</span>
+                                </div>
